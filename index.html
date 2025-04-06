@@ -17,14 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
 </head>
 <body>
-    <div class="dropdown">
-            <p>Click anywhere to start the audio playback.</p>
-            <p>Move hand up/down to adjust volume.</p>
-            <p>Make a fist (✊) to pause<br> hand (🖐) to play the audio.</p>
-            <p>Hand moves left → Audio pans left</p><br>
-            <p>Hand moves right → Audio pans right</p>
-    </div>
-    
+
 
 
 </div>
@@ -45,11 +38,25 @@
 
     <video id="video" autoplay></video>
     <button id="toggle-camera">Hide Camera</button>
+    <button id="toggle-tutorial">Show Tutorial</button>
+    <button id="toggle-tracking">Disable Camera Tracking</button>
+
+<div id="tutorial-content" class="hidden-tutorial">
+    <p>Click anywhere to start the audio playback.</p>
+    <p>Move hand up/down to adjust volume.</p>
+    <p>Make a fist (✊) to pause<br> hand (🖐) to play the audio.</p>
+    <p>Hand moves left → Audio pans left</p>
+    <p>Hand moves right → Audio pans right</p>
+</div>
+
     
 
 
     <!-- Hand Tracking Points -->
-    <canvas id="hand-tracking"></canvas>
+<video id="video" autoplay></video>
+<canvas id="camera-canvas"></canvas>   <!-- Overlays on video -->
+<canvas id="hand-tracking"></canvas>   <!-- Separate preview -->
+
 
     <!-- External JS -->
     <script src="script.js"></script>

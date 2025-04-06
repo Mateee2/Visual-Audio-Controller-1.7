@@ -86,6 +86,16 @@ h1 {
     visibility: hidden;
 }
 
+#camera-canvas {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 400px;
+    height: auto;
+    pointer-events: none;
+    z-index: 100;
+}
+
 #hand-tracking {
     position: absolute;
     bottom: 100px;
@@ -93,7 +103,9 @@ h1 {
     width: 250px;
     height: 150px;
     background: rgba(255, 255, 255, 0.1);
+    z-index: 100;
 }
+
 
 #toggle-camera {
     position: absolute;
@@ -114,6 +126,7 @@ h1 {
 #toggle-camera:hover {
     background-color: #261f1f;
 }
+
 #heart-container {
     position: fixed;
     top: 0;
@@ -163,4 +176,59 @@ h1 {
         transform: translateY(-200px) scale(1.5) rotate(45deg);
         opacity: 0;
     }
+}
+
+#toggle-tutorial {
+    position: absolute;
+    top: 60px;
+    right: 440px;
+    padding: 8px 14px;
+    background-color: #ffffff;
+    border: none;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 50px;
+    z-index: 200;
+}
+
+#toggle-tutorial:hover {
+    background-color: #261f1f;
+    color: white;
+}
+
+#tutorial-content {
+    position: left;
+    top: 110px;
+    right: 440px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 12px;
+    border-radius: 12px;
+    width:400px;
+    box-shadow: 0px 0px 12px rgba(0,0,0,0.2);
+    font-size: 20px;
+    display: none;
+}
+
+#tutorial-content.visible {
+    display: block;
+}
+#toggle-tracking {
+    position: absolute;
+    top: 110px;
+    right: 440px;
+    padding: 8px 14px;
+    background-color: #ffffff;
+    border: none;
+    color: black;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 50px;
+    z-index: 200;
+    width: auto;
+}
+
+#toggle-tracking:hover {
+    background-color: #261f1f;
+    color: white;
 }
