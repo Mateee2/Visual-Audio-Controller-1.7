@@ -15,6 +15,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
+
 </head>
 <body>
 
@@ -45,14 +46,12 @@
     <p>Click anywhere to start the audio playback.</p>
     <p>Move hand up/down to adjust volume.</p>
     <p>Make a fist (✊) to pause<br> hand (🖐) to play the audio.</p>
+    <p>Two hands (🖐🖐) to apply bass boost</p>
     <p>Hand moves left → Audio pans left</p>
     <p>Hand moves right → Audio pans right</p>
 </div>
 
-    
-
-
-    <!-- Hand Tracking Points -->
+<!-- Hand Tracking Points -->
 <video id="video" autoplay></video>
 <canvas id="camera-canvas"></canvas>   <!-- Overlays on video -->
 <canvas id="hand-tracking"></canvas>   <!-- Separate preview -->

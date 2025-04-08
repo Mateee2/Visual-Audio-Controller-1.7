@@ -127,6 +127,16 @@ h1 {
     background-color: #261f1f;
 }
 
+#three-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    z-index: 101;
+}
+
 #heart-container {
     position: fixed;
     top: 0;
