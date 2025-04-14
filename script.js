@@ -1,4 +1,3 @@
-// Your HTML elements setup remains unchanged
 const videoElement = document.getElementById('video');
 const audioElement = document.getElementById('audio');
 const volumeDisplay = document.getElementById('volume-display');
@@ -105,7 +104,41 @@ hands.onResults(results => {
         const thumbTip = mainHand[4];
         const middleFingerTip = mainHand[12];
         const wrist = mainHand[0];
+        const switchSongButton = document.getElementById("switch-song");
+        let isFirstSong = true;
 
+switchSongButton.addEventListener("click", () => {
+    isFirstSong = !isFirstSong;
+
+    // Pause and reset audio before changing song
+    audioElement.pause();
+    audioElement.currentTime = 0;
+
+    // Load new song and start playing
+    audioElement.src = isFirstSong ? "Xtal.mp3" : "Gatorade.mp3";
+    audioElement.load();
+    audioElement.play();
+
+    // Update background and button text
+    document.body.style.backgroundImage = isFirstSong 
+        ? "url('wp6844498-aphex-twin-wallpapers.png')" 
+        : "url('arizona.png')";
+    switchSongButton.innerText = isFirstSong ? "Play Gatorade" : "Play Xtal";
+
+    // Recreate Audio Source and Reconnect all Nodes
+    const currentSource = audioCtx.createMediaElementSource(audioElement);
+    currentSource.connect(panner);
+    panner.connect(bassGain);
+    bassGain.connect(bassFilter);
+    bassFilter.connect(analyser);
+    analyser.connect(audioCtx.destination);
+
+    // Restart visualizer with new song
+    analyser.fftSize = 256;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    drawVisualizer();
+});
         let volume = Math.max(0, Math.min(1, 1 - indexFingerTip.y));
         audioElement.volume = volume;
         volumeDisplay.innerText = `Volume: ${Math.round(volume * 100)}%`;

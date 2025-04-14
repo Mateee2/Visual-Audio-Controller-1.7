@@ -18,6 +18,7 @@ body {
     justify-content: left;
     height: 100vh;
     overflow: hidden;
+    transition: background-image 1s ease-in-out;
 }
 
 h1 {
@@ -241,4 +242,56 @@ h1 {
 #toggle-tracking:hover {
     background-color: #261f1f;
     color: white;
+}
+button {
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(145deg, #ffffff, #dcdcdc);
+    color: #000;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+button:hover {
+    background: linear-gradient(145deg, #333, #111);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+#switch-song {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    background: linear-gradient(145deg, #ffffff, #dcdcdc);
+    color: #000;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    font-weight: bold;
+    z-index: 200;
+    letter-spacing: 1px;
+}
+
+#switch-song:hover {
+    background: linear-gradient(145deg, #333, #111);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+#switch-song:active {
+    transform: translateX(-50%) scale(0.95);
 }
