@@ -12,6 +12,8 @@ const cameraCtx = cameraCanvas.getContext('2d');
 let camera = null;
 let isAudioPlaying = true;
 let isCameraTrackingEnabled = true;
+let isFirstSong = true;
+let canSwitchSong = true;
 
 videoElement.addEventListener('loadedmetadata', () => {
     cameraCanvas.width = videoElement.videoWidth;
@@ -31,8 +33,7 @@ hands.setOptions({
 
 // 🎵 Audio Processing
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-const analyser = audioCtx.createAnalyser();
-const source = audioCtx.createMediaElementSource(audioElement);
+let source = audioCtx.createMediaElementSource(audioElement);
 const panner = audioCtx.createStereoPanner();
 const bassGain = audioCtx.createGain();
 bassGain.gain.value = 1.0;
@@ -44,6 +45,9 @@ bassFilter.gain.value = 0;
 source.connect(panner);
 panner.connect(bassGain);
 bassGain.connect(bassFilter);
+bassFilter.connect(audioCtx.destination);
+
+const analyser = audioCtx.createAnalyser();
 bassFilter.connect(analyser);
 analyser.connect(audioCtx.destination);
 analyser.fftSize = 256;
@@ -75,8 +79,27 @@ hands.onResults(results => {
             const isRingFolded = Math.abs(ringTip.y - wrist.y) < foldedThreshold;
             const isPinkyFolded = Math.abs(pinkyTip.y - wrist.y) < foldedThreshold;
 
-            if (isThumbUp && isIndexFolded && isMiddleFolded && isRingFolded && isPinkyFolded) {
+            const isThumbsUp = isThumbUp && isIndexFolded && isMiddleFolded && isRingFolded && isPinkyFolded;
+
+            if (isThumbsUp) {
                 spawnHearts();
+
+                if (canSwitchSong) {
+                    canSwitchSong = false;
+                    setTimeout(() => canSwitchSong = true, 1500);
+
+                    isFirstSong = !isFirstSong;
+                    audioElement.pause();
+                    audioElement.currentTime = 0;
+
+                    audioElement.src = isFirstSong ? "Xtal.mp3" : "Gatorade.mp3";
+                    audioElement.load();
+                    audioElement.play();
+
+                    document.body.style.backgroundImage = isFirstSong
+                        ? "url('wp6844498-aphex-twin-wallpapers.png')"
+                        : "url('arizona.png')";
+                }
             }
 
             const scaleFactor = 1.5;
@@ -101,51 +124,19 @@ hands.onResults(results => {
 
         const mainHand = handsDetected[0];
         const indexFingerTip = mainHand[8];
-        const thumbTip = mainHand[4];
         const middleFingerTip = mainHand[12];
+        const ringFingerTip = mainHand[16];
+        const pinkyFingerTip = mainHand[20];
+        const thumbTip = mainHand[4];
         const wrist = mainHand[0];
-        const switchSongButton = document.getElementById("switch-song");
-        let isFirstSong = true;
 
-switchSongButton.addEventListener("click", () => {
-    isFirstSong = !isFirstSong;
-
-    // Pause and reset audio before changing song
-    audioElement.pause();
-    audioElement.currentTime = 0;
-
-    // Load new song and start playing
-    audioElement.src = isFirstSong ? "Xtal.mp3" : "Gatorade.mp3";
-    audioElement.load();
-    audioElement.play();
-
-    // Update background and button text
-    document.body.style.backgroundImage = isFirstSong 
-        ? "url('wp6844498-aphex-twin-wallpapers.png')" 
-        : "url('arizona.png')";
-    switchSongButton.innerText = isFirstSong ? "Play Gatorade" : "Play Xtal";
-
-    // Recreate Audio Source and Reconnect all Nodes
-    const currentSource = audioCtx.createMediaElementSource(audioElement);
-    currentSource.connect(panner);
-    panner.connect(bassGain);
-    bassGain.connect(bassFilter);
-    bassFilter.connect(analyser);
-    analyser.connect(audioCtx.destination);
-
-    // Restart visualizer with new song
-    analyser.fftSize = 256;
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-    drawVisualizer();
-});
         let volume = Math.max(0, Math.min(1, 1 - indexFingerTip.y));
         audioElement.volume = volume;
         volumeDisplay.innerText = `Volume: ${Math.round(volume * 100)}%`;
         volumeFill.style.width = `${volume * 100}%`;
 
-        let distance = Math.abs(thumbTip.x - middleFingerTip.x);
-        if (distance < 0.05) {
+        let pinchDistance = Math.abs(thumbTip.x - middleFingerTip.x);
+        if (pinchDistance < 0.05) {
             if (isAudioPlaying) {
                 audioElement.pause();
                 isAudioPlaying = false;

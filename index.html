@@ -1,67 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hand Gesture Volume Control
-    </title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hand Gesture Volume Control</title>
 
-    <!-- External CSS -->
-    <link rel="stylesheet" href="styles.css">
+  <!-- External CSS -->
+  <link rel="stylesheet" href="styles.css" />
 
-    <!-- MediaPipe & TensorFlow -->
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
-
+  <!-- MediaPipe & TensorFlow -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-webgl"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils"></script>
 </head>
 <body>
+  <div class="audio-container">
+    <audio id="audio" controls>
+      <source src="Xtal.mp3" type="audio/mp3" />
+      Your browser does not support the audio element.
+    </audio>
+    <canvas id="visualizer"></canvas>
+    <div id="volume-slider"><div id="volume-fill"></div></div>
+    <div id="volume-display">Volume: 50%</div>
+  </div>
 
+  <video id="video" autoplay></video>
+  <button id="toggle-camera">Hide Camera</button>
+  <button id="toggle-tutorial">Show Tutorial</button>
+  <button id="toggle-tracking">Disable Camera Tracking</button>
 
-
-</div>
-    <div class="audio-container">
-        <audio id="audio" controls>
-            <source src="Xtal.mp3" type="audio/mp3">
-            Your browser does not support the audio element.
-        </audio>
-
-        <canvas id="visualizer"></canvas>
-
-        <div id="volume-slider">
-            <div id="volume-fill"></div>
-        </div>
-
-        <div id="volume-display">Volume: 50%</div>
-    </div>
-
-    <video id="video" autoplay></video>
-    <button id="toggle-camera">Hide Camera</button>
-    <button id="toggle-tutorial">Show Tutorial</button>
-    <button id="toggle-tracking">Disable Camera Tracking</button>
-    <button id="switch-song">Switch Song</button>
-
-
-<div id="tutorial-content" class="hidden-tutorial">
+  <div id="tutorial-content" class="hidden-tutorial">
     <p>Click anywhere to start the audio playback.</p>
     <p>Move hand up/down to adjust volume.</p>
     <p>Make a fist (✊) to pause<br> hand (🖐) to play the audio.</p>
     <p>Two hands (🖐🖐) to apply bass boost</p>
     <p>Hand moves left → Audio pans left</p>
     <p>Hand moves right → Audio pans right</p>
-</div>
+  </div>
 
-<!-- Hand Tracking Points -->
-<video id="video" autoplay></video>
-<canvas id="camera-canvas"></canvas>   <!-- Overlays on video -->
-<canvas id="hand-tracking"></canvas>   <!-- Separate preview -->
+  <!-- Hand Tracking Points -->
+  <canvas id="camera-canvas"></canvas>
+  <canvas id="hand-tracking"></canvas>
 
-
-    <!-- External JS -->
-    <script src="script.js"></script>
-    <div id="heart-container"></div>
+  <div id="heart-container"></div>
+  <script src="script.js"></script>
 
 </body>
 </html>
