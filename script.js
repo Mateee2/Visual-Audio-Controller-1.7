@@ -24,7 +24,7 @@ const backgrounds = [
     "killeverything.webp",
     "dysti.jpg",
     "newsorsomething.webp",
-    "PizzicatoFive.jpg",
+    "Pizzicatofive.jpg",
     "smokedope2016.jpg",
     "basedgod.jpg"
 ];
