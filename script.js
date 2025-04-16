@@ -12,8 +12,23 @@ const cameraCtx = cameraCanvas.getContext('2d');
 let camera = null;
 let isAudioPlaying = true;
 let isCameraTrackingEnabled = true;
-let isFirstSong = true;
+let currentSongIndex = 0;
 let canSwitchSong = true;
+
+const songs = ["Xtal.mp3", "Gatorade.mp3", "Peroxide.mp3", "TrueLove.mp3", "KillEverything.mp3", "Dysti.mp3", "NewsorSomething.mp3", "PizzicatoFive.mp3", "Smokedope2016.mp3", "basedgod.mp3"];
+const backgrounds = [
+    "wp6844498-aphex-twin-wallpapers.png",
+    "arizona.png",
+    "e.png",
+    "truelove.jpg",
+    "killeverything.webp",
+    "dysti.jpg",
+    "newsorsomething.webp",
+    "PizzicatoFive.jpg",
+    "smokedope2016.jpg",
+    "basedgod.jpg"
+];
+
 
 videoElement.addEventListener('loadedmetadata', () => {
     cameraCanvas.width = videoElement.videoWidth;
@@ -35,20 +50,11 @@ hands.setOptions({
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 let source = audioCtx.createMediaElementSource(audioElement);
 const panner = audioCtx.createStereoPanner();
-const bassGain = audioCtx.createGain();
-bassGain.gain.value = 1.0;
-const bassFilter = audioCtx.createBiquadFilter();
-bassFilter.type = "lowshelf";
-bassFilter.frequency.value = 200;
-bassFilter.gain.value = 0;
 
 source.connect(panner);
-panner.connect(bassGain);
-bassGain.connect(bassFilter);
-bassFilter.connect(audioCtx.destination);
-
 const analyser = audioCtx.createAnalyser();
-bassFilter.connect(analyser);
+
+panner.connect(analyser);
 analyser.connect(audioCtx.destination);
 analyser.fftSize = 256;
 
@@ -72,36 +78,40 @@ hands.onResults(results => {
 
             const foldedThreshold = 0.1;
             const thumbUpThreshold = 0.2;
+            const thumbDownThreshold = -0.2;
 
             const isThumbUp = (wrist.y - thumbTip.y) > thumbUpThreshold;
+            const isThumbDown = (wrist.y - thumbTip.y) < thumbDownThreshold;
+
             const isIndexFolded = Math.abs(indexTip.y - wrist.y) < foldedThreshold;
             const isMiddleFolded = Math.abs(middleTip.y - wrist.y) < foldedThreshold;
             const isRingFolded = Math.abs(ringTip.y - wrist.y) < foldedThreshold;
             const isPinkyFolded = Math.abs(pinkyTip.y - wrist.y) < foldedThreshold;
 
             const isThumbsUp = isThumbUp && isIndexFolded && isMiddleFolded && isRingFolded && isPinkyFolded;
+            const isThumbsDown = isThumbDown && isIndexFolded && isMiddleFolded && isRingFolded && isPinkyFolded;
 
-            if (isThumbsUp) {
-                spawnHearts();
-
-                if (canSwitchSong) {
-                    canSwitchSong = false;
-                    setTimeout(() => canSwitchSong = true, 1500);
-
-                    isFirstSong = !isFirstSong;
-                    audioElement.pause();
-                    audioElement.currentTime = 0;
-
-                    audioElement.src = isFirstSong ? "Xtal.mp3" : "Gatorade.mp3";
-                    audioElement.load();
-                    audioElement.play();
-
-                    document.body.style.backgroundImage = isFirstSong
-                        ? "url('wp6844498-aphex-twin-wallpapers.png')"
-                        : "url('arizona.png')";
+            if ((isThumbsUp || isThumbsDown) && canSwitchSong) {
+                canSwitchSong = false;
+                setTimeout(() => canSwitchSong = true, 1500);
+            
+                if (isThumbsUp) {
+                    currentSongIndex = (currentSongIndex + 1) % songs.length;
+                } else if (isThumbsDown) {
+                    currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
                 }
+            
+                spawnHearts();
+                audioElement.pause();
+                audioElement.currentTime = 0;
+            
+                audioElement.src = songs[currentSongIndex];
+                audioElement.load();
+                audioElement.play();
+            
+                document.body.style.backgroundImage = `url('${backgrounds[currentSongIndex]}')`;
             }
-
+            
             const scaleFactor = 1.5;
             hand.forEach(point => {
                 if (isCameraTrackingEnabled) {
@@ -152,20 +162,6 @@ hands.onResults(results => {
 
         const panValue = (wrist.x - 0.5) * 2;
         panner.pan.value = Math.max(-1, Math.min(1, panValue));
-
-        if (handsDetected.length === 2) {
-            const leftX = handsDetected[0][0].x;
-            const rightX = handsDetected[1][0].x;
-            const handDistance = Math.abs(rightX - leftX);
-
-            const maxBoost = 15;
-            const boostAmount = Math.min(maxBoost, handDistance * 100);
-            bassFilter.gain.value = boostAmount - 5;
-
-            volumeDisplay.innerText += ` | Bass: ${Math.round(bassFilter.gain.value)}dB`;
-        } else {
-            bassFilter.gain.value = 0;
-        }
     }
 });
 
