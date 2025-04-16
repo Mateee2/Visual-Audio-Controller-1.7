@@ -15,7 +15,7 @@ let isCameraTrackingEnabled = true;
 let currentSongIndex = 0;
 let canSwitchSong = true;
 
-const songs = ["Xtal.mp3", "Gatorade.mp3", "Peroxide.mp3", "TrueLove.mp3", "KillEverything.mp3", "Dysti.mp3", "NewsorSomething.mp3", "PizzicatoFive.mp3", "Smokedope2016.mp3", "basedgod.mp3"];
+const songs = ["Xtal.mp3", "Gatorade.mp3", "Peroxide.mp3", "TrueLove.mp3", "KillEverything.mp3", "Dysti.mp3", "NewsorSomething.mp3", "PizzicatoFive.mp3", "smokedope2016.mp3", "basedgod.mp3"];
 const backgrounds = [
     "wp6844498-aphex-twin-wallpapers.png",
     "arizona.png",
